@@ -66,6 +66,50 @@ A Django-based healthcare management system with user authentication and role-ba
    - Open `http://127.0.0.1:8000/` in your browser.
 
 
+## 🌐 Deploying with NGINX & Gunicorn
+1. **Install Gunicorn & NGINX**
+   ```bash
+   sudo apt update
+   sudo apt install gunicorn nginx
+   ```
+
+2. **Start Gunicorn**
+   ```bash
+   gunicorn --workers 3 --bind unix:/run/gunicorn.sock RBAC.wsgi:application
+   ```
+
+3. **Configure NGINX**
+   - Open the config file:
+     ```bash
+     sudo nano /etc/nginx/myproject/healthcare
+     ```
+   - Add the following:
+     ```nginx
+     server {
+         listen 80;
+         server_name your_domain_or_IP;
+
+         location /static/ {
+             root /home/ubuntu/project/django-auth-banao;
+         }
+
+         location / {
+             proxy_pass http://unix:/run/gunicorn.sock;
+             
+         }
+     }
+     ```
+   - Save and exit (Ctrl+X, then Y, then Enter)
+
+4. **Enable the NGINX config**
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/healthcare /etc/nginx/sites-enabled
+   sudo nginx -t
+   sudo systemctl restart nginx
+   ```
+
+
+
 ## Screenshots
 
 ### 🏠 Signup Page
