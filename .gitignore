@@ -1,0 +1,55 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environment
+venv/
+.env/
+env/
+*.venv
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Django migrations
+*/migrations/* 
+!*/migrations/__init__.py
+
+# Pytest and test-related files
+.coverage
+.tox/
+.nox/
+*.cover
+*.py,cover
+.hypothesis/
+
+# IDE/editor specific files
+.vscode/
+.idea/
+*.iml
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# MyPy
+.mypy_cache/
+
+# Pycharm
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+__pycache__/
