@@ -81,7 +81,7 @@ A Django-based healthcare management system with user authentication and role-ba
 3. **Configure NGINX**
    - Open the config file:
      ```bash
-     sudo nano /etc/nginx/myproject/healthcare
+     sudo nano /etc/nginx/myproject/
      ```
    - Add the following:
      ```nginx
