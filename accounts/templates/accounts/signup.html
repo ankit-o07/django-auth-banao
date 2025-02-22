@@ -32,6 +32,7 @@
 
         .form-group {
             margin-bottom: 10px;
+            position: relative;
         }
 
         label {
@@ -72,8 +73,29 @@
         .login-link:hover {
             text-decoration: underline;
         }
+
         .toggle-password {
-           width: 20%;
+            
+            width: 20%;
+            background: none;
+            border: none;
+            color: #fff;
+            background: #007bff;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .password-match {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .password-match.success {
+            color: green;
+        }
+
+        .password-match.error {
+            color: red;
         }
     </style>
 </head>
@@ -108,15 +130,19 @@
                 {{ form.email.label_tag }}
                 {{ form.email }}
             </div>
+            
             <div class="form-group">
                 {{ form.password1.label_tag }}
                 {{ form.password1 }}
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">Show</button>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password1')">Show</button>
             </div>
             <div class="form-group">
                 {{ form.password2.label_tag }}
                 {{ form.password2 }}
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password2')">Show</button>
+                <span id="password-match-message" class="password-match"></span>
             </div>
+
             <div class="form-group">
                 {{ form.user_type.label_tag }}
                 {{ form.user_type }}
@@ -146,22 +172,62 @@
         <a href="{% url 'login' %}" class="login-link">Back to Login</a>
     </div>
 
-
-
     <script>
         // Function to toggle password visibility
-        function togglePasswordVisibility() {
-            const passwordField = document.querySelector('[name="password1"]');
-            const toggleButton = document.querySelector('.toggle-password');
-            
+        function togglePasswordVisibility(fieldId) {
+            const passwordField = document.querySelector(`[name="${fieldId}"]`);
+            const toggleButton = passwordField.nextElementSibling;
+
             if (passwordField.type === 'password') {
-                passwordField.type = 'text'; // Show the password
-                toggleButton.textContent = "Hide"; // Change button text to "Hide"
+                passwordField.type = 'text'; // Show password
+                toggleButton.textContent = "Hide"; // Change button text
             } else {
-                passwordField.type = 'password'; // Hide the password
-                toggleButton.textContent = "Show"; // Change button text to "Show"
+                passwordField.type = 'password'; // Hide password
+                toggleButton.textContent = "Show"; // Change button text
             }
         }
+
+        // Function to check password match in real-time
+        function checkPasswordMatch() {
+            const password1 = document.querySelector('[name="password1"]').value;
+            const password2 = document.querySelector('[name="password2"]').value;
+            const message = document.getElementById("password-match-message");
+
+            if (password1 === "" || password2 === "") {
+                message.textContent = "";
+            } else if (password1 === password2) {
+                message.textContent = "Passwords match ✅";
+                message.classList.add("success");
+                message.classList.remove("error");
+            } else {
+                message.textContent = "Passwords do not match ❌";
+                message.classList.add("error");
+                message.classList.remove("success");
+            }
+        }
+
+        // Function to validate passwords before submitting
+        function validatePasswords(event) {
+            const password1 = document.querySelector('[name="password1"]').value;
+            const password2 = document.querySelector('[name="password2"]').value;
+
+            if (password1 !== password2) {
+                event.preventDefault(); // Prevent form submission
+                alert("Passwords do not match! Please enter the same password.");
+            }
+        }
+
+        // Attach event listeners
+        document.addEventListener("DOMContentLoaded", function () {
+            const form = document.querySelector("form");
+            const password1Field = document.querySelector('[name="password1"]');
+            const password2Field = document.querySelector('[name="password2"]');
+
+            form.addEventListener("submit", validatePasswords);
+            password1Field.addEventListener("input", checkPasswordMatch);
+            password2Field.addEventListener("input", checkPasswordMatch);
+        });
     </script>
+
 </body>
 </html>
